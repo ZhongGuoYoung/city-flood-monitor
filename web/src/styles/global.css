@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+#app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 状态指示器 */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-online {
+  background-color: #4caf50;
+}
+
+.status-offline {
+  background-color: #f44336;
+}
+
+.status-maintenance {
+  background-color: #ff9800;
+}
+
+/* 洪涝等级指示器 */
+.flood-indicator-small {
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  margin-left: 8px;
+}
+
+.flood-low {
+  background-color: rgba(76, 175, 80, 0.9);
+  color: white;
+}
+
+.flood-medium {
+  background-color: rgba(255, 152, 0, 0.9);
+  color: white;
+}
+
+.flood-high {
+  background-color: rgba(244, 67, 54, 0.9);
+  color: white;
+}
+
+.flood-critical {
+  background-color: rgba(156, 39, 176, 0.9);
+  color: white;
+}
+
+.flood-critical.animated {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>导航-点击</title>
+    <g id="app界面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图" transform="translate(-810.000000, -129.000000)">
+            <g id="编组-44" transform="translate(810.000000, 129.000000)">
+                <circle id="椭圆形" fill="#3479FA" cx="9" cy="9" r="9"></circle>
+                <polygon id="路径" fill="#FFFFFF" fill-rule="nonzero" points="9.47239453 11.4682939 11.764749 12.4607812 12.8801689 5.03028809 5.08084277 9.61501465 7.12732324 10.5812227 12.0721553 6.08427246 8.10216211 11.0379375 8.0494541 13.1458359 9.47239453 11.4683027"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

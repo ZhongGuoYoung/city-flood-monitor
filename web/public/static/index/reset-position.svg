@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>复位</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="40" height="40" rx="8"></rect>
+        <filter x="-35.0%" y="-35.0%" width="180.0%" height="180.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="2" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.497525865   0 0 0 0 0.497525865   0 0 0 0 0.497525865  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="app界面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图" transform="translate(-791.000000, -262.000000)">
+            <g id="复位" transform="translate(799.000000, 270.000000)">
+                <g id="矩形备份">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill-opacity="0.80043638" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g transform="translate(8.000000, 8.000000)" fill="#333333" fill-rule="nonzero">
+                    <rect id="矩形" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                    <path d="M21.2714063,11.994375 C21.2432716,11.6606108 21.039213,11.3672096 20.7360974,11.2246928 C20.4329818,11.0821761 20.0768596,11.1121954 19.8018786,11.3034428 C19.5268977,11.4946903 19.3748341,11.8181108 19.4029688,12.151875 C19.4205469,12.3609375 19.4294531,12.57375 19.4294531,12.7846875 C19.4294531,16.8813281 16.0964063,20.214375 11.9997656,20.214375 C7.903125,20.214375 4.57007813,16.8813281 4.57007813,12.7846875 C4.57007813,8.96929688 7.46109375,5.81695312 11.1675,5.401875 L11.1675,6.92976563 L15.515625,4.42007812 L11.1677344,1.90992188 L11.1677344,3.51703125 C6.91508459,3.90153958 3.46955017,7.13041376 2.81004855,11.3491736 C2.15054692,15.5679334 4.44626415,19.6943142 8.37867188,21.3583594 C11.2522549,22.5737535 14.5437735,22.2676106 17.1439178,20.5431073 C19.7440622,18.818604 21.3065113,15.9054322 21.3046891,12.7853906 C21.3046891,12.5217188 21.2934375,12.2557031 21.2714063,11.994375 Z" id="路径"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

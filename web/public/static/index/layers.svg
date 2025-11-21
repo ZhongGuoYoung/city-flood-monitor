@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>图层</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="40" height="40" rx="8"></rect>
+        <filter x="-35.0%" y="-35.0%" width="180.0%" height="180.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="2" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.497525865   0 0 0 0 0.497525865   0 0 0 0 0.497525865  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="app界面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图" transform="translate(-873.000000, -262.000000)">
+            <g id="图层" transform="translate(881.000000, 270.000000)">
+                <g id="矩形备份">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill-opacity="0.80043638" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="图层-01" transform="translate(8.000000, 8.000000)" fill="#333333" fill-rule="nonzero">
+                    <rect id="矩形" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                    <path d="M21.792,12.048 L12.192,16.512 L2.256,11.712 C1.824,11.472 1.296,11.664 1.056,12.096 C0.816,12.528 1.008,13.056 1.44,13.296 L11.76,18.24 C11.904,18.288 12.048,18.336 12.144,18.336 C12.24,18.336 12.432,18.288 12.48,18.24 L22.464,13.632 C22.896,13.392 23.088,12.864 22.896,12.432 C22.8,12.048 22.272,11.856 21.792,12.048 Z M1.488,8.064 L11.808,13.008 C11.952,13.056 12.096,13.104 12.192,13.104 C12.288,13.104 12.48,13.056 12.528,13.008 L22.512,8.4 C22.8,8.256 22.992,7.968 23.04,7.584 C23.04,7.248 22.848,6.912 22.56,6.768 L12.528,1.728 C12.288,1.584 12,1.584 11.712,1.728 L1.488,6.48 C1.2,6.624 1.008,6.912 0.96,7.296 C1.008,7.584 1.2,7.872 1.488,8.064 Z M12.048,3.456 L20.16,7.584 L12.24,11.232 L3.888,7.248 L12.048,3.456 Z M21.792,16.08 L12.192,20.544 L2.256,15.792 C1.824,15.552 1.296,15.744 1.056,16.176 C0.816,16.608 1.008,17.136 1.44,17.376 L11.76,22.32 C11.904,22.368 12.048,22.416 12.144,22.416 C12.24,22.416 12.432,22.368 12.48,22.32 L22.464,17.712 C22.896,17.472 23.088,16.944 22.896,16.512 C22.8,16.08 22.272,15.888 21.792,16.08 L21.792,16.08 Z" id="形状"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

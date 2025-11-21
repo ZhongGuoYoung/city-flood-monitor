@@ -1,0 +1,63 @@
+{
+  "name": "city-flood-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve-old": "vue-cli-service serve",
+    "build-old": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@ezuikit/player-hls": "^0.1.0",
+    "axios": "^1.13.1",
+    "core-js": "^3.8.3",
+    "echarts": "^6.0.0",
+    "element-plus": "^2.11.7",
+    "hls": "^0.0.1",
+    "hls.js": "^1.6.14",
+    "leaflet": "^1.9.4",
+    "scss": "^0.2.4",
+    "vue": "^3.2.13",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "sass": "^1.93.3",
+    "sass-loader": "^16.0.6",
+    "vite": "^7.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "vue/setup-compiler-macros": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser",
+      "requireConfigFile": false
+    },
+    "rules": {},
+    "globals": {
+      "defineProps": "readonly",
+      "defineEmits": "readonly",
+      "defineExpose": "readonly",
+      "withDefaults": "readonly"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
