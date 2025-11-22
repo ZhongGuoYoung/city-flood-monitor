@@ -11,6 +11,7 @@ from .routes_ezviz import router as ezviz_router
 from pathlib import Path
 from .routes_history import router as history_router
 import mimetypes
+import uvicorn
 
 app = FastAPI(title="Ultralytics FastAPI", version="1.0.0")
 
@@ -69,3 +70,11 @@ app.include_router(ezviz_router)
 
 # 挂载历史视频查看
 app.include_router(history_router)
+
+# if __name__ == "__main__":
+#     uvicorn.run(
+#         "server.app:app",   # 模块名:app实例
+#         host="0.0.0.0",
+#         port=9000,
+#         reload=True
+#     )

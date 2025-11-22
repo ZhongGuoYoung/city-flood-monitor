@@ -4,6 +4,7 @@ import pymysql
 
 router = APIRouter(prefix="/api/cameras", tags=["cameras"])
 
+
 def get_conn():
     return pymysql.connect(
         host="localhost",
@@ -14,6 +15,7 @@ def get_conn():
         charset="utf8mb4",
         cursorclass=pymysql.cursors.DictCursor
     )
+
 
 @router.get("/")
 def list_cameras():
