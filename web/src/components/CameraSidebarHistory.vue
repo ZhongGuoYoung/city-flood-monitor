@@ -4,11 +4,25 @@
     <div class="time-box">
       <div class="time-row">
         <label>开始</label>
-        <input type="date" v-model="startStr" />
+        <el-date-picker
+          v-model="startStr"
+          type="date"
+          placeholder="选择开始日期"
+          value-format="YYYY-MM-DD"
+          :editable="false"          
+          class="time-picker"
+        />
       </div>
       <div class="time-row">
         <label>结束</label>
-        <input type="date" v-model="endStr" />
+        <el-date-picker
+          v-model="endStr"
+          type="date"
+          placeholder="选择结束日期"
+          value-format="YYYY-MM-DD"
+          :editable="false"
+          class="time-picker"
+        />
       </div>
 
       <!-- 操作按钮区 -->
@@ -199,56 +213,168 @@ watch(filteredVideos, (list) => {
 </script>
 
 <style scoped>
-.time-box{
-  margin:10px; padding:10px; border-radius:8px;
-  border:1px dashed rgba(255,255,255,.25); color:#fff;
-}
-.time-row{
-  display:grid; grid-template-columns: 42px 1fr;
-  align-items:center; gap:8px; margin-bottom:8px;
-}
-.time-row label{ font-size:12px; opacity:.9; }
-.time-row input{
-  padding:6px 8px; border-radius:6px; border:1px solid rgba(255,255,255,.25);
-  background: rgba(255,255,255,.05); color:#fff;
-}
-.query-btn{
-  width:100%; margin-top:6px;
-  border:1px solid rgba(255,255,255,.35); border-radius:8px;
-  background:rgba(255,255,255,.08); color:#fff;
-  cursor:pointer; padding:6px 10px;
-}
-.query-btn:hover{ background:rgba(255,255,255,.14); }
-
-/* 新增：删除按钮样式（红色一点） */
-.danger-btn{
-  width:100%; margin-top:6px;
-  border:1px solid rgba(255,99,132,.7); border-radius:8px;
-  background:rgba(255,99,132,.12); color:#ff8c9a;
-  cursor:pointer; padding:6px 10px;
-}
-.danger-btn:disabled{
-  opacity:.4; cursor:not-allowed;
-}
-.danger-btn:not(:disabled):hover{
-  background:rgba(255,99,132,.18);
+.source-list {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 12px 18px;
+  background: linear-gradient(180deg, rgba(13, 24, 48, 0.65), rgba(10, 16, 32, 0.9));
+  color: #e5e7eb;
+  font-family: 'Poppins', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
-.source-item{
-  padding:15px 20px; cursor:pointer; transition:all .2s ease;
-  border-left:4px solid transparent; display:flex;
-  align-items:center; gap:12px; color:#fff;
+.time-box {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: linear-gradient(145deg, rgba(34, 211, 238, 0.06), rgba(15, 23, 42, 0.76));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 12px 32px -26px rgba(34, 211, 238, 0.65);
 }
-.source-item:hover{ background-color:rgba(255,255,255,.1); }
-.source-item.active{
-  background-color:rgba(79,195,247,.2);
-  border-left-color:#4fc3f7;
+
+.time-row {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
-.source-item i{ font-size:1.2rem; color:#4fc3f7; }
-.source-info{ flex:1; }
-.source-name{ font-weight:500; margin-bottom:4px; }
-.source-desc{
-  font-size:.8rem; opacity:.8;
-  display:flex; align-items:center; gap:5px;
+
+.time-row label {
+  font-size: 12px;
+  color: rgba(226, 232, 240, 0.85);
 }
+
+.time-row input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.7);
+  color: #e2e8f0;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.time-row input:focus {
+  border-color: rgba(34, 211, 238, 0.85);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.25);
+}
+
+.btn {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 10px 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.15s ease, border-color 0.2s ease;
+}
+
+.query-btn {
+  border: 1px solid rgba(34, 211, 238, 0.65);
+  background: linear-gradient(135deg, #2563eb, #22d3ee);
+  color: #e0f2fe;
+  box-shadow: 0 12px 30px -20px rgba(34, 211, 238, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.query-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px -22px rgba(34, 211, 238, 0.96);
+}
+
+.query-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.97);
+}
+
+/* 删除按钮（红调） */
+.danger-btn {
+  border: 1px solid rgba(248, 113, 113, 0.7);
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.28), rgba(248, 113, 113, 0.16));
+  color: #fecdd3;
+  box-shadow: 0 10px 28px -22px rgba(248, 113, 113, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.danger-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.danger-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  border-color: rgba(148, 163, 184, 0.28);
+  background: rgba(148, 163, 184, 0.14);
+  color: rgba(226, 232, 240, 0.6);
+}
+
+.source-item {
+  padding: 14px 14px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #e5e7eb;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 30px -26px rgba(34, 211, 238, 0.65);
+}
+
+.source-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(34, 211, 238, 0.25);
+  transform: translateY(-1px);
+}
+
+.source-item.active {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(37, 99, 235, 0.15));
+  border-color: #22d3ee;
+  box-shadow: 0 14px 36px -26px rgba(34, 211, 238, 0.75);
+}
+
+.source-item i {
+  font-size: 1.15rem;
+  color: #38bdf8;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
+}
+
+.source-info {
+  flex: 1;
+}
+
+.source-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: 0.01em;
+}
+
+.source-desc {
+  font-size: 0.82rem;
+  color: rgba(226, 232, 240, 0.72);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 空状态 */
+.source-list > div:last-child[style] {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  margin: 0 2px;
+}
+.time-picker {
+  width: 100%;
+}
+
+/* 如果想让它和深色面板更贴一点，可以再细调整： */
+:deep(.el-input__wrapper) {
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 10px;
+}
+
 </style>

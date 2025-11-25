@@ -10,7 +10,7 @@
         @delete-record="handleDelete"
       />
     </aside>
-
+    
     <!-- 右：顶部工具条 + 中间左右布局 + 底部进度条 -->
     <main class="main">
       <!-- 顶部工具条 -->
@@ -50,6 +50,14 @@
           <button class="btn" :disabled="!ticks.length" @click="exportCSV">
             导出CSV
           </button>
+
+          <button
+             class="btn"
+              :disabled="!selected || !ticks.length"
+              @click="downloadVideoWithMask"
+            >
+             下载视频
+            </button>
         </div>
       </header>
 
@@ -88,10 +96,10 @@
             <h3>淹没范围 / 风险等级</h3>
             <div class="panel-legend">
               <span class="legend-item water">
-                <span class="dot"></span>淹没范围（water_percent）
+                <span class="dot"></span>淹没范围
               </span>
               <span class="legend-item risk">
-                <span class="dot"></span>风险等级（risk_level）
+                <span class="dot"></span>风险等级
               </span>
             </div>
           </header>
@@ -640,7 +648,13 @@ function updateChart () {
       type: 'category',
       name: '时间(s)',
       boundaryGap: false,
-      data: xs
+      data: xs,
+      axisLine: { lineStyle: { color: '#fff' } },
+        axisLabel: {
+          formatter: '{value}',
+          color: '#fff'
+        },
+      splitLine: { show: false }
     },
     yAxis: [
       {
@@ -649,9 +663,13 @@ function updateChart () {
         position: 'left',
         min: 0,
         max: 100,
+        nameTextStyle: { color: '#c7d2fe', fontWeight: 600 },
+        axisLine: { lineStyle: { color: '#38bdf8' } },
         axisLabel: {
-          formatter: '{value}%'
-        }
+          formatter: '{value}%',
+          color: '#e2e8f0'
+        },
+        splitLine: { lineStyle: { color: 'rgba(148, 163, 184, 0.28)' } }
       },
       {
         type: 'value',
@@ -659,9 +677,13 @@ function updateChart () {
         position: 'right',
         min: 0,
         max: 5,
+        nameTextStyle: { color: '#fed7aa', fontWeight: 600 },
+        axisLine: { lineStyle: { color: '#fbbf24' } },
         axisLabel: {
-          formatter: '{value}'
-        }
+          formatter: '{value}',
+          color: '#fbbf24'
+        },
+        splitLine: { show: false }
       }
     ],
     series: [
@@ -719,6 +741,38 @@ function onResize () {
   }
 }
 
+//导出视频
+async function downloadVideoWithMask () {
+  if (!selected.value) return
+
+  const sessionId = selected.value.data.id
+  const name = selected.value.data.name || 'history'
+
+  try {
+    // 这里的路径要和后端保持一致
+    // 后端是：@router.get("/api/history/{session_id}/exportVideo")
+    const url = `${API_BASE}/history/${sessionId}/exportVideo`
+    // 如果你后端写的是 export_video，改成：
+    // const url = `${API_BASE}/history/${sessionId}/export_video`
+
+    const res = await axios.get(url, {
+      responseType: 'blob'
+    })
+
+    const blob = res.data
+    const blobUrl = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = blobUrl
+    a.download = `${name}_mask.mp4`
+    a.click()
+    URL.revokeObjectURL(blobUrl)
+  } catch (err) {
+    console.error('downloadVideoWithMask failed', err)
+    window.alert('导出失败，请检查后端日志')
+  }
+}
+
+
 // 生命周期
 onMounted(async () => {
   const { start, end } = defaultRange()
@@ -753,76 +807,126 @@ onBeforeUnmount(() => {
   grid-template-columns: 320px 1fr;
   height: 100%;
   overflow: hidden;
-  background: #f5f7fb;
+  --bg: #0b1224;
+  --panel: rgba(15, 23, 42, 0.78);
+  --panel-strong: rgba(24, 33, 54, 0.92);
+  --border: rgba(148, 163, 184, 0.18);
+  --primary: #22d3ee;
+  --primary-strong: #2563eb;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  background:
+    radial-gradient(120% 140% at 15% 20%, rgba(56, 189, 248, 0.12), transparent 40%),
+    radial-gradient(100% 120% at 85% 0%, rgba(14, 165, 233, 0.12), transparent 38%),
+    linear-gradient(135deg, #0f172a 0%, #0b1224 48%, #0f172a 100%);
+  color: var(--text);
+  font-family: 'Poppins', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
 .sidebar {
-  background: linear-gradient(180deg, #1e3c72, #2a5298);
-  color: #fff;
+  background: linear-gradient(180deg, rgba(30, 60, 114, 0.88), rgba(42, 82, 152, 0.92));
+  color: #f8fafc;
   overflow: auto;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.04), 0 18px 38px -24px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
 }
 
 .main {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 12px;
-  padding: 12px;
+  gap: 16px;
+  padding: 16px;
   overflow: hidden;
 }
 
 /* 顶部工具条 */
 .topbar {
-  background: #fff;
-  border-radius: 10px;
-  padding: 12px 16px;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 14px 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 40px -26px rgba(34, 211, 238, 0.6), 0 10px 24px -20px rgba(15, 23, 42, 0.8);
 }
 
 .title h2 {
   margin: 0;
   font-size: 18px;
-  color: #111827;
+  color: #f8fafc;
+  letter-spacing: 0.01em;
 }
 
 .title p {
   margin: 4px 0 0;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--muted);
 }
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .btn {
-  padding: 6px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #fff;
+  padding: 8px 14px;
+  border: 1px solid rgba(34, 211, 238, 0.5);
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary-strong), var(--primary));
+  color: #e8f4ff;
   cursor: pointer;
   font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease, background 0.2s ease;
+  box-shadow: 0 12px 30px -20px rgba(14, 165, 233, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .btn:hover {
-  background: #f3f4f6;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 35px -22px rgba(34, 211, 238, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  filter: brightness(1.04);
+}
+
+.btn:active {
+  transform: translateY(0);
+  filter: brightness(0.96);
 }
 
 .btn:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.55;
+  box-shadow: none;
+  background: linear-gradient(135deg, #1f2937, #111827);
+  border-color: rgba(148, 163, 184, 0.32);
+  color: #94a3b8;
+}
+
+.actions select.btn {
+  appearance: none;
+  padding-right: 36px;
+  background:
+    linear-gradient(135deg, var(--primary-strong), var(--primary)),
+    linear-gradient(45deg, transparent 50%, rgba(232, 244, 255, 0.9) 50%),
+    linear-gradient(135deg, rgba(232, 244, 255, 0.9) 50%, transparent 50%);
+  background-position: center center, calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-repeat: no-repeat;
+  background-size: cover, 8px 8px, 8px 8px;
+}
+
+.actions select.btn option {
+  color: #0f172a;
 }
 
 /* 中间内容：左视频右图 */
 .content {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
-  gap: 12px;
+  gap: 16px;
   align-items: stretch;
   overflow: hidden;
 }
@@ -830,12 +934,14 @@ onBeforeUnmount(() => {
 /* 播放器 */
 .player-wrap {
   position: relative;
-  background: #000;
-  border-radius: 10px;
+  background: radial-gradient(120% 160% at 30% 30%, rgba(34, 211, 238, 0.08), transparent 58%), #020617;
+  border-radius: 12px;
   overflow: hidden;
-  min-height: 420px;
+  min-height: 440px;
   display: grid;
   place-items: center;
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 46px -32px rgba(34, 211, 238, 0.75), 0 12px 42px -34px rgba(0, 0, 0, 0.9);
 }
 
 .player {
@@ -852,87 +958,126 @@ onBeforeUnmount(() => {
   pointer-events: none; /* 仅展示掩膜，不可点击 */
 }
 
-
 .placeholder {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  color: #9ca3af;
+  color: rgba(226, 232, 240, 0.8);
   font-size: 14px;
+  letter-spacing: 0.01em;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.82));
 }
 
 .hud {
   position: absolute;
   right: 10px;
   top: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.62);
+  color: #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 10px;
   font-size: 12px;
   display: grid;
   gap: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 28px -20px rgba(34, 211, 238, 0.7);
 }
 
 /* 底部进度条 */
 .progress {
-  background: #fff;
-  border-radius: 10px;
-  padding: 8px 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: var(--panel-strong);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 36px -28px rgba(34, 211, 238, 0.58);
 }
 
 .progress input[type='range'] {
   width: 100%;
+  appearance: none;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0.22), rgba(37, 99, 235, 0.2));
+  border: 1px solid var(--border);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.progress input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #38bdf8);
+  border: 1px solid #fff;
+  box-shadow: 0 6px 16px -8px rgba(56, 189, 248, 0.9);
+}
+
+.progress input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #38bdf8);
+  border: 1px solid #fff;
+  box-shadow: 0 6px 16px -8px rgba(56, 189, 248, 0.9);
 }
 
 .ticks {
   display: flex;
   justify-content: space-between;
-  color: #6b7280;
+  color: var(--muted);
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 6px;
+  letter-spacing: 0.01em;
 }
 
 /* 右边折线图面板 */
 .panel {
-  background: #fff;
-  border-radius: 10px;
-  padding: 12px 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 48px -32px rgba(34, 211, 238, 0.55), 0 8px 28px -28px rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
+  color: var(--text);
 }
 
 .chart-panel {
-  min-height: 420px;
+  min-height: 440px;
 }
 
 .panel-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .panel-head h3 {
   margin: 0;
   font-size: 16px;
-  color: #111827;
+  color: #e2e8f0;
+  letter-spacing: 0.01em;
 }
 
 .panel-legend {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   font-size: 12px;
-  color: #4b5563;
+  color: #dbeafe;
 }
 
 .legend-item {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .legend-item .dot {
@@ -943,20 +1088,23 @@ onBeforeUnmount(() => {
 }
 
 .legend-item.water .dot {
-  background: #1d4ed8;
+  background: #38bdf8;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
 }
 
 .legend-item.risk .dot {
-  background: #dff044;
+  background: #fbbf24;
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
 }
 
 /* ECharts 容器 */
 .chart {
   width: 100%;
   flex: 1;
-  background: #fbfdff;
-  border: 1px solid #eef2ff;
-  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(10, 12, 29, 0.92));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 /* 响应式 */
@@ -964,6 +1112,7 @@ onBeforeUnmount(() => {
   .content {
     grid-template-columns: 1fr;
   }
+
   .chart-panel {
     min-height: 260px;
   }

@@ -55,7 +55,7 @@ body{ -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   position: sticky;
   top: 0;
   z-index: 10;
-  height: 80px;
+  height: 92px;
   display: flex;
   align-items: center;
   justify-content: space-between;
