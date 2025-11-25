@@ -1,5 +1,5 @@
 # server/routes_export.py
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List
@@ -9,6 +9,10 @@ from datetime import datetime
 from urllib.parse import quote
 from docx import Document
 from docx.opc.exceptions import PackageNotFoundError
+from starlette.responses import FileResponse
+
+from .database import get_conn
+from .utils.export_video import export_video_with_ticks
 
 router = APIRouter(tags=["export"])
 
@@ -50,6 +54,7 @@ def format_time_label(ts_ms: int, source_type: str) -> str:
         return dt.strftime("%Y-%m-%d %H:%M:%S")
 
 
+# 导出文件
 # ====== 模板路径 ======
 
 TEMPLATE_PATH = Path(__file__).resolve().parent / "templates" / "video_result_template.docx"
@@ -141,4 +146,55 @@ async def export_word(req: ExportRequest):
         buf,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers=headers
+    )
+
+
+# 导出视频
+# ====== 导出带掩膜的视频 ======
+
+BASE_DIR = Path(__file__).resolve().parent
+RECORD_DIR = BASE_DIR / "records"
+EXPORT_DIR = BASE_DIR / "exports"
+EXPORT_DIR.mkdir(exist_ok=True)
+
+@router.get("/api/history/{session_id}/exportVideo")
+def export_history_video(session_id: int):
+    """
+    1. 从 detect_session 里查出视频相对路径
+    2. 用 export_video_with_ticks 生成带掩膜的视频
+    3. 返回 mp4 文件
+    """
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            sql = """
+                SELECT record_path, camera_name
+                FROM detect_session
+                WHERE id = %s
+            """
+            cur.execute(sql, (session_id,))
+            row = cur.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="session not found")
+    finally:
+        conn.close()
+
+    rel_path = row["record_path"]
+    src_path = RECORD_DIR / rel_path
+    if not src_path.exists():
+        raise HTTPException(status_code=404, detail="源视频不存在")
+
+    out_path = EXPORT_DIR / (src_path.stem + "_mask.mp4")
+
+    # 没生成过就生成一次，生成过就直接返回
+    if not out_path.exists():
+        try:
+            export_video_with_ticks(session_id, str(src_path), str(out_path))
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"导出失败: {e}")
+
+    return FileResponse(
+        path=out_path,
+        media_type="video/mp4",
+        filename=out_path.name,
     )
